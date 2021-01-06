@@ -58,7 +58,7 @@ def get_uresnet_model(input_channel_num=3, out_ch=3, start_ch=16, depth=5, inc_r
                 m = Conv2D(dim, 2, activation=acti, padding='same')(m)
             else:
                 m = Conv2DTranspose(dim, 3, strides=2, activation=acti, padding='same')(m)
-                m = Concatenate()([n, m])
+            m = Concatenate()([n, m])
             m = _conv_block(m, dim, acti, bn, res)
         else:
             m = _conv_block(m, dim, acti, bn, res, do)
