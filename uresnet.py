@@ -7,6 +7,8 @@ U-Net: Convolutional Networks for Biomedical Image Segmentation
 (https://arxiv.org/abs/1505.04597)
 Residual Block: Deep Residual Learning for Image Recognition
 (https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf)
+DRUNet: Plug-and-Play Image Restoration with Deep Denoiser Prior
+(https://arxiv.org/pdf/2008.13751.pdf)
 ---
 img_shape: (height, width, channels)
 out_ch: number of output channels
