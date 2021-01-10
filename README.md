@@ -1,9 +1,9 @@
 # UResNetModel_Keras
 
-<h3> Model </h3>
+<h2> Model </h2>
 ----------------
 
-<div>
+<div><br>
   The architecture was inspired by Plug-and-Play Image Restoration with Deep Denoiser Prior <br> (https://arxiv.org/pdf/2008.13751.pdf)
   </div>
 <div>
