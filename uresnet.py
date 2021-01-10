@@ -5,6 +5,8 @@ from keras.layers import Conv2DTranspose, UpSampling2D, Dropout, BatchNormalizat
 '''
 U-Net: Convolutional Networks for Biomedical Image Segmentation
 (https://arxiv.org/abs/1505.04597)
+Residual Block: Deep Residual Learning for Image Recognition
+(https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf)
 ---
 img_shape: (height, width, channels)
 out_ch: number of output channels
@@ -44,7 +46,7 @@ def get_uresnet_model(input_channel_num=3, out_ch=3, start_ch=16, depth=5, inc_r
             # Contracting Path
             n = _conv_block(m, dim, acti, bn, res)
             for i in range(res_rate):
-                m = _res_block(n, dim, acti, bn, res)
+                m = _res_block(n, dim, acti, bn, res) if res else n
             m = MaxPooling2D()(m) if mp else Conv2D(dim, 3, strides=2, padding='same')(m)
 
             # Contracting with Recursive
@@ -52,7 +54,7 @@ def get_uresnet_model(input_channel_num=3, out_ch=3, start_ch=16, depth=5, inc_r
 
             # Expanding Path
             for i in range(res_rate):
-                m = _res_block(m, int(inc * dim), acti, bn, res)
+                m = _res_block(m, int(inc * dim), acti, bn, res) if res else m
             if up:
                 m = UpSampling2D()(m)
                 m = Conv2D(dim, 2, activation=acti, padding='same')(m)
