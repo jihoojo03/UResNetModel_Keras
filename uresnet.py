@@ -1,5 +1,5 @@
 from keras.models import Input, Model
-from keras.layers import Add, Conv2D, Concatenate, MaxPooling2D, ReLU
+from keras.layers import Add, Conv2D, Concatenate, MaxPooling2D, Activation
 from keras.layers import Conv2DTranspose, UpSampling2D, Dropout, BatchNormalization
 
 '''
@@ -28,20 +28,22 @@ def get_uresnet_model(input_channel_num=3, out_ch=3, start_ch=16, depth=5, inc_r
          dropout=0.5, res_rate=4, batchnorm=True, maxpool=True, upconv=True, residual=True):
     def _conv_block(m, dim, acti, bn, res, do=0):
         n = Conv2D(dim, 3, activation=acti, padding='same')(m)
+        n = Activation(acti)(n)
         n = BatchNormalization()(n) if bn else n
 
         return n
 
     def _res_block(m, dim, acti, bn, res, do=0):
-        n = Conv2D(dim, 3, activation=acti, padding='same', kernel_initializer='he_normal') (m)
+        n = Conv2D(dim, 3, padding='same', kernel_initializer='he_normal') (m)
         n = BatchNormalization() (n) if bn else n
+        n = Activation(acti)(n)
         n = Dropout(do) (n) if do else n
         n = Conv2D(dim, 3, padding='same', kernel_initializer='he_normal') (n)
         n = BatchNormalization() (n) if bn else n
-        x = Add() ([m, n]) if res else n
-        x = ReLU() (x)
+        n = Add() ([m, n]) if res else n
+        n = Activation(acti)(n)
 
-        return x
+        return n
 
     def _level_block(m, dim, depth, inc, acti, do, bn, mp, up, res, res_rate):
         if depth > 0:
